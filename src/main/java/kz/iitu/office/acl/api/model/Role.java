@@ -1,13 +1,26 @@
 package kz.iitu.office.acl.api.model;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
-@Setter
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
 @Getter
-@AllArgsConstructor
+@Setter
+@ToString(exclude = "employees")
 public class Role {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            mappedBy = "roles")
+    private List<Employee> employees;
 }
